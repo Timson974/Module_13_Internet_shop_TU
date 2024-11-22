@@ -1,19 +1,22 @@
 import { Injectable } from '@angular/core';
-import {Subject} from "rxjs";
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { delay, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoaderService {
-
-  isShowed$: Subject<boolean> = new Subject<boolean>();
-
-  constructor() { }
+  private isShowedSource = new BehaviorSubject<boolean>(false);
+  isShowed$ = this.isShowedSource.asObservable().pipe(
+    switchMap(show => show ? of(show) : of(show).pipe(delay(500)))  // Задержка 500 мс перед скрытием лоадера
+  );
 
   show() {
-    this.isShowed$.next( true);
+    this.isShowedSource.next(true);
   }
+
   hide() {
-    this.isShowed$.next( false);
+    this.isShowedSource.next(false);
   }
 }
+

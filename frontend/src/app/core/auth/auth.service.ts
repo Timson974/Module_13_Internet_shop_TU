@@ -4,6 +4,7 @@ import {DefaultResponseType} from "../../../types/default-response.type";
 import {LoginResponseType} from "../../../types/login-response.type";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
+import { CartService } from "../../shared/services/cart.service";
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class AuthService {
   isLogged$: Subject<boolean> = new Subject<boolean>();
   private isLogged: boolean = false;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private cartService: CartService) {
     this.isLogged = !!localStorage.getItem(this.accessTokenKey);
   }
 
